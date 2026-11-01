@@ -18,26 +18,56 @@ export function EventsSection({ language }: EventsSectionProps) {
     <section id="events" className="events-section section-pad">
       <div className="section-shell">
         <Reveal>
-          <SectionHeading language={language} eyebrow={copy.eventsEyebrow} title={copy.eventsTitle} description={copy.eventsText} />
+          <SectionHeading
+            language={language}
+            eyebrow={copy.eventsEyebrow}
+            title={copy.eventsTitle}
+            description={copy.eventsText}
+          />
         </Reveal>
+
+        {/* On phones this is a single vertical thread; on desktop it becomes
+            the alternating horizontal timeline. Same markup, different CSS. */}
         <div className="events-timeline">
-          <div className="events-timeline__axis" aria-hidden="true"><span /></div>
-          {weddingEvents.map((event, index) => (
-            <Reveal key={event.id} className={`event-row${index % 2 === 1 ? " event-row--offset" : ""}`} delay={(index % 4) * 0.06} amount={0.12}>
-              <span className="event-row__number">{String(index + 1).padStart(2, "0")}</span>
-              <div className="event-row__photo">
-                <Image src={event.image} alt={event.imageAlt[language]} fill sizes="(max-width: 640px) 82px, 120px" className="cover-image" />
-              </div>
-              <div className="event-row__content">
-                <p className="event-row__time"><Clock3 size={13} />{event.time[language]}</p>
-                <h3>{event.title[language]}</h3>
-                <p>{event.description[language]}</p>
-              </div>
-              <span className="event-row__arrow" aria-hidden="true"><ArrowUpRight size={16} /></span>
-            </Reveal>
-          ))}
+          <div className="events-timeline__axis" aria-hidden="true">
+            <span />
+          </div>
+          <ol className="events-timeline__list" style={{ listStyle: "none", margin: 0, padding: 0 }}>
+            {weddingEvents.map((event, index) => (
+              <li key={event.id}>
+                <Reveal className="event-row" delay={Math.min(index % 4, 3) * 0.05} amount={0.08}>
+                  <span className="event-row__number" aria-hidden="true">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <div className="event-row__photo">
+                    <Image
+                      src={event.image}
+                      alt={event.imageAlt[language]}
+                      fill
+                      sizes="(max-width: 639px) 88px, 112px"
+                      className="cover-image"
+                    />
+                  </div>
+                  <div className="event-row__content">
+                    <p className={`event-row__time${language === "te" ? " telugu" : ""}`} lang={language}>
+                      <Clock3 size={12} aria-hidden="true" />
+                      {event.time[language]}
+                    </p>
+                    <h3 lang={language}>{event.title[language]}</h3>
+                    <p lang={language}>{event.description[language]}</p>
+                  </div>
+                  <span className="event-row__arrow" aria-hidden="true">
+                    <ArrowUpRight size={16} />
+                  </span>
+                </Reveal>
+              </li>
+            ))}
+          </ol>
         </div>
-        <div className="events-footer-note telugu">{language === "en" ? "ప్రతి క్షణం ఒక జ్ఞాపకం. ప్రతి జ్ఞాపకం మనదే." : "ప్రతి క్షణం ఒక జ్ఞాపకం. ప్రతి జ్ఞాపకం మనదే."}</div>
+
+        <p className="events-footer-note" lang="te">
+          ప్రతి క్షణం ఒక జ్ఞాపకం. ప్రతి జ్ఞాపకం మనదే.
+        </p>
       </div>
     </section>
   );

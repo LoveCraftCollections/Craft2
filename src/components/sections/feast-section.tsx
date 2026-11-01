@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { Leaf, Soup, Utensils } from "lucide-react";
-import { weddingMenu } from "@/data/food";
+import { feastPhotos, weddingMenu } from "@/data/food";
 import { pageCopy, type Language } from "@/data/wedding";
 import { Reveal } from "@/components/ui/reveal";
 
@@ -18,31 +18,60 @@ export function FeastSection({ language }: FeastSectionProps) {
       <div className="feast-section__leaf-shape" aria-hidden="true" />
       <div className="section-shell feast-shell">
         <Reveal className="feast-intro">
-          <div className="feast-eyebrow"><Utensils size={15} />{copy.foodEyebrow}</div>
-          <h2>{copy.foodTitle}<span className="telugu">{language === "en" ? "పెళ్లి పందిరి విందు" : "పెళ్లి పందిరి విందు"}</span></h2>
-          <p>{copy.foodText}</p>
-          <div className="feast-rule"><span /><Leaf size={19} strokeWidth={1.4} /><span /></div>
-          <div className="feast-serving-note"><Soup size={17} /><span>{language === "en" ? "Served fresh on a banana leaf" : "అరటి ఆకుపై తాజాగా వడ్డిస్తాం"}</span></div>
-        </Reveal>
-        <Reveal className="feast-visual" delay={0.12}>
-          <div className="feast-photo">
-            <Image
-              src="/images/banana-leaf-feast.webp"
-              alt={language === "en" ? "A colourful Andhra wedding feast served on fresh banana leaves" : "తాజా అరటి ఆకుపై వడ్డించిన రంగుల ఆంధ్ర పెళ్లి విందు"}
-              fill
-              sizes="(max-width: 900px) 95vw, 58vw"
-              className="cover-image"
-            />
-            <div className="feast-photo__label"><span>THE ANDHRA THALI</span><small>మా పెళ్లి విందు</small></div>
+          <p className={`feast-eyebrow${language === "te" ? " telugu" : ""}`} lang={language}>
+            <Utensils size={14} aria-hidden="true" />
+            {copy.foodEyebrow}
+          </p>
+          <h2 lang={language}>
+            {copy.foodTitle}
+            <span lang="te">{language === "en" ? "పెళ్లి పందిరి విందు" : "పెళ్లి పందిరి విందు"}</span>
+          </h2>
+          <p lang={language}>{copy.foodText}</p>
+          <div className="feast-rule" aria-hidden="true">
+            <span />
+            <Leaf size={17} strokeWidth={1.4} />
+            <span />
           </div>
+          <p className="feast-serving-note" lang={language}>
+            <Soup size={16} aria-hidden="true" />
+            {language === "en" ? "Served fresh on a banana leaf" : "అరటి ఆకుపై తాజాగా వడ్డిస్తాం"}
+          </p>
+        </Reveal>
+
+        <Reveal className="feast-visual" delay={0.08}>
+          <div className="feast-gallery" role="group" aria-label={copy.foodGalleryTitle}>
+            {feastPhotos.map((photo) => (
+              <figure className="feast-tile" key={photo.id}>
+                <Image
+                  src={photo.image}
+                  alt={photo.alt[language]}
+                  fill
+                  sizes="(max-width: 359px) 92vw, (max-width: 899px) 46vw, 26vw"
+                  className="cover-image"
+                />
+                <figcaption className={`feast-tile__label${language === "te" ? " telugu" : ""}`} lang={language}>
+                  {photo.label[language]}
+                  <small aria-hidden="true">{language === "en" ? photo.label.te : photo.label.en}</small>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+
           <div className="feast-menu">
-            <h3>{copy.menuTitle}</h3>
+            <h3 lang={language}>{copy.menuTitle}</h3>
             <div className="feast-menu__items">
               {weddingMenu.map((dish, index) => (
                 <div className="dish-row" key={dish.name.en}>
-                  <span className="dish-row__index">0{index + 1}</span>
-                  <span className="dish-row__name">{dish.name[language]}<small>{dish.note[language]}</small></span>
-                  <span className="dish-row__leaf" aria-hidden="true"><Leaf size={13} /></span>
+                  <span className="dish-row__index" aria-hidden="true">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span className="dish-row__name" lang={language}>
+                    {dish.name[language]}
+                    <small>{dish.note[language]}</small>
+                  </span>
+                  <span className="dish-row__leaf" aria-hidden="true">
+                    <Leaf size={12} />
+                  </span>
                 </div>
               ))}
             </div>

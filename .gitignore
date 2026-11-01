@@ -7,3 +7,7 @@ coverage/
 *.tsbuildinfo
 .env*
 .DS_Store
+
+# Multi-megabyte source art used by scripts/optimize-images.mjs.
+# The optimised derivatives in public/images are committed instead.
+assets/source/*.png
